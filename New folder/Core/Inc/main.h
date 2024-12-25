@@ -71,6 +71,7 @@ void Error_Handler(void);
 #define tf2_GPIO_Port GPIOB
 #define tf1_Pin GPIO_PIN_5
 #define tf1_GPIO_Port GPIOB
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

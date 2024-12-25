@@ -57,22 +57,20 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define B1_Pin GPIO_PIN_13
-#define B1_GPIO_Port GPIOC
-#define B1_EXTI_IRQn EXTI15_10_IRQn
-#define USART_TX_Pin GPIO_PIN_2
-#define USART_TX_GPIO_Port GPIOA
-#define USART_RX_Pin GPIO_PIN_3
-#define USART_RX_GPIO_Port GPIOA
-#define LD2_Pin GPIO_PIN_5
-#define LD2_GPIO_Port GPIOA
-#define TMS_Pin GPIO_PIN_13
-#define TMS_GPIO_Port GPIOA
-#define TCK_Pin GPIO_PIN_14
-#define TCK_GPIO_Port GPIOA
-#define SWO_Pin GPIO_PIN_3
-#define SWO_GPIO_Port GPIOB
-
+#define tf3_Pin GPIO_PIN_10
+#define tf3_GPIO_Port GPIOB
+#define bt2_Pin GPIO_PIN_7
+#define bt2_GPIO_Port GPIOC
+#define bt0_Pin GPIO_PIN_8
+#define bt0_GPIO_Port GPIOA
+#define bt1_Pin GPIO_PIN_9
+#define bt1_GPIO_Port GPIOA
+#define tf0_Pin GPIO_PIN_3
+#define tf0_GPIO_Port GPIOB
+#define tf2_Pin GPIO_PIN_4
+#define tf2_GPIO_Port GPIOB
+#define tf1_Pin GPIO_PIN_5
+#define tf1_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

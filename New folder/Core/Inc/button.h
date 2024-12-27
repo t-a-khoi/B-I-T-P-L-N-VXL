@@ -7,8 +7,14 @@
 #ifndef INC_BUTTON_H_
 #define INC_BUTTON_H_
 
-extern int button_flag[];
+#include "global.h"
+#define NORMAL_STATE SET
+#define PRESSED_STATE RESET
+#define NUM_BUTTONS 3
 
-void button_run();
+int isButtonPressed(int index);
+int isButtonLongPressed(int index);
+void getKeyInput();
+
 
 #endif /* INC_BUTTON_H_ */

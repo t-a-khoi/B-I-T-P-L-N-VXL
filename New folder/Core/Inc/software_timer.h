@@ -7,11 +7,16 @@
 
 #ifndef INC_SOFTWARE_TIMER_H_
 #define INC_SOFTWARE_TIMER_H_
+#include "global.h"
+ typedef struct {
+    int counter;
+    int flag;
+} Timer;
 
-extern int timer_flag[];
+#define NUM_TIMERS 10 // Define the number of timers
+extern Timer timers[NUM_TIMERS];
+extern int timer_cycle;
 
-void timer_set(int index, int duration);
-void timer_run();
-
-
+extern void setTimer(int index, int duration);
+void timerRun();
 #endif /* INC_SOFTWARE_TIMER_H_ */

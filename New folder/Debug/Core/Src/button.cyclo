@@ -1,1 +1,3 @@
-../Core/Src/button.c:26:6:button_run	12
+../Core/Src/button.c:30:5:isButtonPressed	2
+../Core/Src/button.c:38:5:isButtonLongPressed	2
+../Core/Src/button.c:45:6:getKeyInput	8

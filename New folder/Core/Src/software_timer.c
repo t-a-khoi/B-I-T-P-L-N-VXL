@@ -5,22 +5,27 @@
  *      Author: ADMIN
  */
 
-#define n0_timer 2
+#include "software_timer.h"
 
-int timer_flag[n0_timer] = {0, 0};
-int timer_counter[n0_timer] = {100, 100};
 
-void timer_set(int index, int duration) {
-	timer_flag[index] = 0;
-	timer_counter[index] = duration;
+#define NUM_TIMERS 10 // Define the number of timers
+Timer timers[NUM_TIMERS];
+int timer_cycle = 10;
+
+void setTimer(int index, int duration) {
+    if (index >= 0 && index < NUM_TIMERS) {
+        timers[index].counter = duration / timer_cycle;
+        timers[index].flag = 0;
+    }
 }
 
-void timer_run() {
-	for (int i = 0; i < n0_timer; i++) {
-		if (timer_counter[i] > 1) {
-			timer_counter[i]--;
-		} else {
-			timer_flag[i] = 1;
-		}
-	}
+void timerRun() {
+    for (int i = 0; i < NUM_TIMERS; i++) {
+        if (timers[i].counter > 0) {
+            timers[i].counter--;
+            if (timers[i].counter <= 0) {
+                timers[i].flag = 1;
+            }
+        }
+    }
 }

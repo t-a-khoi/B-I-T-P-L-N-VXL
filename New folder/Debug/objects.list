@@ -1,4 +1,8 @@
 "./Core/Src/button.o"
+"./Core/Src/fsm_auto.o"
+"./Core/Src/fsm_manual.o"
+"./Core/Src/fsm_modify.o"
+"./Core/Src/global.o"
 "./Core/Src/lcd_i2c.o"
 "./Core/Src/led_output.o"
 "./Core/Src/main.o"
@@ -23,3 +27,4 @@
 "./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.o"
 "./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.o"
 "./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.o"
+"./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.o"

@@ -4,64 +4,72 @@
  *  Created on: Dec 26, 2024
  *      Author: ADMIN
  */
-#include "main.h"
+#include "button.h"
 
-#define n0_button 3
-#define n0_button_debounce 3
-#define duration_hold 200
-#define duration_hold_automatic 20
-#define button_pressed GPIO_PIN_RESET
-#define button_released GPIO_PIN_SET
+typedef struct {
+	GPIO_TypeDef* GPIO_Port;
+	uint16_t GPIO_Pin;
+    int KeyReg0;
+    int KeyReg1;
+    int KeyReg2;
+    int KeyReg3;
+    int TimeOutForKeyPress;
+    int flag;
+    int long_pressed;
+    int pressed;
+} Button;
 
-int button_flag[n0_button] = {0, 0, 0};
-GPIO_PinState button_debounce[n0_button][n0_button_debounce] = { {button_released, button_released, button_released},
-																 {button_released, button_released, button_released},
-																 {button_released, button_released, button_released} };
-GPIO_PinState button_buffer[n0_button][2] = { {button_released, button_released},
-											  {button_released, button_released},
-											  {button_released, button_released} };
-int hold_counter[n0_button] = {duration_hold, duration_hold, duration_hold};
-int hold_counter_automatic[n0_button] = {1, 1, 1};
+Button buttons[NUM_BUTTONS];
 
-void button_run() {
-	for (int i = 0; i < n0_button; i++) {
-		for (int j = 0; j < n0_button_debounce - 1; j++) {
-			button_debounce[i][j] = button_debounce[i][j+1];
-		}
-		if (i == 0) {
-			button_debounce[i][n0_button_debounce - 1] = HAL_GPIO_ReadPin(bt0_GPIO_Port, bt0_Pin);
-		} else if (i == 1) {
-			button_debounce[i][n0_button_debounce - 1] = HAL_GPIO_ReadPin(bt1_GPIO_Port, bt1_Pin);
-		} else {
-			button_debounce[i][n0_button_debounce - 1] = HAL_GPIO_ReadPin(bt2_GPIO_Port, bt2_Pin);
-		}
-		int same_debounce = 1;
-		for (int j = 0; j < n0_button_debounce - 1; j++) {
-			if (button_debounce[i][j] != button_debounce[i][j+1]) {
-				same_debounce = 0;
-				break;
-			}
-		}
-		button_buffer[i][0] = button_buffer[i][1];
-		if (same_debounce == 1) {
-			button_buffer[i][1] = button_debounce[i][0];
-		}
-		button_flag[i] = 0;
-		if (button_buffer[i][1] == button_pressed) {
-			if (hold_counter[i] > 1) {
-				hold_counter[i]--;
-				if (button_buffer[i][0] == button_released) {
-					button_flag[i] = 1;
-				}
-			} else if (hold_counter_automatic[i] > 1) {
-				hold_counter_automatic[i]--;
-			} else {
-				hold_counter_automatic[i] = duration_hold_automatic;
-				button_flag[i] = 1;
-			}
-		} else {
-			hold_counter[i] = duration_hold;
-			hold_counter_automatic[i] = 1;
-		}
+Button buttons[NUM_BUTTONS] = {
+    {BUTTON0_GPIO_Port, BUTTON0_Pin, NORMAL_STATE, NORMAL_STATE, NORMAL_STATE, NORMAL_STATE, 500, 0, 0},
+    {BUTTON1_GPIO_Port, BUTTON1_Pin, NORMAL_STATE, NORMAL_STATE, NORMAL_STATE, NORMAL_STATE, 500, 0, 0},
+    {BUTTON2_GPIO_Port, BUTTON2_Pin, NORMAL_STATE, NORMAL_STATE, NORMAL_STATE, NORMAL_STATE, 500, 0, 0}
+};
+
+int isButtonPressed(int index){
+	if(buttons[index].flag == 1){
+		buttons[index].flag = 0;
+		return 1;
 	}
+	return 0;
+}
+
+int isButtonLongPressed(int index){
+	if(buttons[index].long_pressed == 1){
+		buttons[index].long_pressed = 0;
+		return 1;
+	}
+	return 0;
+}
+void getKeyInput() {
+    for (int index = 0; index < NUM_BUTTONS; index++) {
+        buttons[index].KeyReg2 = buttons[index].KeyReg1;
+        buttons[index].KeyReg1 = buttons[index].KeyReg0;
+        // Read the current state of the button
+        buttons[index].KeyReg0 = HAL_GPIO_ReadPin(buttons[index].GPIO_Port, buttons[index].GPIO_Pin);
+
+        // Check for stable button state
+        if ((buttons[index].KeyReg1 == buttons[index].KeyReg0) && (buttons[index].KeyReg1 == buttons[index].KeyReg2)) {
+            if (buttons[index].KeyReg2 != buttons[index].KeyReg3) {
+                buttons[index].KeyReg3 = buttons[index].KeyReg2;
+
+                // Check if button is in pressed state
+                if (buttons[index].KeyReg3 == PRESSED_STATE) {
+                    buttons[index].TimeOutForKeyPress = 500;
+                    buttons[index].flag = 1;
+                }
+
+            } else {
+                // Decrease timeout if button is held down
+                buttons[index].TimeOutForKeyPress--;
+                if (buttons[index].TimeOutForKeyPress == 0) {
+                    buttons[index].TimeOutForKeyPress = 500;
+                    if (buttons[index].KeyReg3 == PRESSED_STATE) {
+                        buttons[index].long_pressed = 1;
+                    }
+                }
+            }
+        }
+    }
 }
